@@ -1,0 +1,33 @@
+{
+  "name": "summoner-stats-portal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,html}\"",
+    "lint": "eslint",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.37.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "vite": "^7.1.10"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.15",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.15"
+  }
+}

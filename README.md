@@ -1,6 +1,14 @@
 # Summoner Stats Portal
 
-A fan-made web portal to track and analyze League of Legends summoner statistics.
+A fan-made web portal to track and analyze League of Legends summoner statistics. Inspired by platforms like **OP.GG** and **U.GG**, this project aims to replicate their analytical experience while implementing the functionality and design **from scratch** using modern web technologies.
+
+## Tech Stack
+* **Frontend:** React, Vite, TailwindCSS
+* **State Management / Data Fetching:** TanStack Query (React Query)
+* **Routing:** React Router
+* **Language:** JavaScript
+* **API:** Riot Games Developer API `https://developer.riotgames.com`
+* **Version Control:** Git & GitHub
 
 ## Setup
 
@@ -31,4 +39,5 @@ Fill in your Riot API key in `.env.local`
 ### Notes
 
 * This project is fan-made and not monetized.
+* No assets or code are copied from OP.GG or U.GG - their design and data structures serve only as reference and inspiration.
 * Make sure not to commit your .env.local file with your API key.

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import useQueueInfo from "./useQueueInfo";
+import { timeAgo } from "./utils/time";
+import { calculateKDA } from "./utils/calculate";
 
 const summonerSpellMap = {
   1: "SummonerBoost",
@@ -33,14 +35,14 @@ const useMatchHistory = (riotId, tag) => {
     (async () => {
       try {
         const versionRes = await fetch(
-          "https://ddragon.leagueoflegends.com/api/versions.json"
+          "https://ddragon.leagueoflegends.com/api/versions.json",
         );
         const versions = await versionRes.json();
         const latest = versions[0];
         setVersion(latest);
 
         const runesRes = await fetch(
-          `https://ddragon.leagueoflegends.com/cdn/${latest}/data/en_US/runesReforged.json`
+          `https://ddragon.leagueoflegends.com/cdn/${latest}/data/en_US/runesReforged.json`,
         );
         const runeData = await runesRes.json();
 
@@ -70,37 +72,51 @@ const useMatchHistory = (riotId, tag) => {
 
         const accountRes = await fetch(
           `${baseURL}riot/account/v1/accounts/by-riot-id/${riotId}/${tag}`,
-          { headers: { "X-Riot-Token": apiKey } }
+          { headers: { "X-Riot-Token": apiKey } },
         );
         const accountJson = await accountRes.json();
 
         const matchIdsRes = await fetch(
           `${baseURL}lol/match/v5/matches/by-puuid/${accountJson.puuid}/ids?start=0&count=10`,
-          { headers: { "X-Riot-Token": apiKey } }
+          { headers: { "X-Riot-Token": apiKey } },
         );
         const matchIds = await matchIdsRes.json();
 
-        const matchDetails = await Promise.all(
-          matchIds.map(async (id) => {
-            const matchRes = await fetch(`${baseURL}lol/match/v5/matches/${id}`, {
-              headers: { "X-Riot-Token": apiKey },
-            });
-            const match = await matchRes.json();
+        const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+        const matchDetails = [];
 
-            const p = match.info.participants.find(
-              (x) => x.puuid === accountJson.puuid
+        for (const id of matchIds) {
+          try {
+            const matchRes = await fetch(
+              `${baseURL}lol/match/v5/matches/${id}`,
+              { headers: { "X-Riot-Token": apiKey } }
             );
-            if (!p) return null;
 
-            return {
+            if (matchRes.status === 429) {
+              console.warn("Rate limited — waiting 2s before retry...");
+              await delay(2000);
+              continue;
+            }
+
+            const match = await matchRes.json();
+            const p = match.info?.participants?.find(
+              (x) => x.puuid === accountJson.puuid,
+            );
+            if (!p) continue;
+
+            matchDetails.push({
               id,
               gameInfo: {
                 gameType: queues[match.info.queueId] || "Match",
-                date: new Date(match.info.gameStartTimestamp).toLocaleString(),
+                date: timeAgo(match.info.gameEndTimestamp),
                 result: p.win ? "Victory" : "Defeat",
                 duration: `${Math.floor(match.info.gameDuration / 60)}:${String(
                   match.info.gameDuration % 60
                 ).padStart(2, "0")}`,
+                kills: p.kills,
+                deaths: p.deaths,
+                assists: p.assists,
+                kda: calculateKDA(p.kills, p.deaths, p.assists),
               },
               champion: {
                 image: `${ddragonBase}champion/${p.championName}.png`,
@@ -112,33 +128,32 @@ const useMatchHistory = (riotId, tag) => {
                 }.png`,
                 name: `Summoner Spell ${n}`,
               })),
-              augments: p.perks.styles.map((style) => {
-                if (style.description === "primaryStyle") {
-                  return {
-                    image: runeTreeMap[style.style]
-                      ? `https://ddragon.leagueoflegends.com/cdn/img/${runeTreeMap[style.style]}`
-                      : `https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png`,
-                    name: `Primary Rune Tree`,
-                  };
-                } else {
-                  return {
-                    image: runeTreeMap[style.style]
-                      ? `https://ddragon.leagueoflegends.com/cdn/img/${runeTreeMap[style.style]}`
-                      : `https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png`,
-                    name: "Secondary RuneTree",
-                  };
-                }
-              }),
-              items: [0, 1, 2, 3, 4, 5, 6]
-                .map((n) => p[`item${n}`])
-                .filter((id) => id)
-                .map((id) => ({
-                  id,
-                  image: `${ddragonBase}item/${id}.png`,
-                })),
-            };
-          })
-        );
+              augments: p.perks.styles.map((style) => ({
+                image: runeTreeMap[style.style]
+                  ? `https://ddragon.leagueoflegends.com/cdn/img/${runeTreeMap[style.style]}`
+                  : `https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png`,
+                name:
+                  style.description === "primaryStyle"
+                    ? "Primary Rune Tree"
+                    : "Secondary Rune Tree",
+              })),
+              items: (() => {
+                const itemSlots = [0, 1, 2, 3, 4, 5, 6];
+                return itemSlots.map((n) => {
+                  const id = p[`item${n}`];
+                  return id && id !== 0
+                    ? { id, image: `${ddragonBase}item/${id}.png` }
+                    : { id: `empty-${n}`, image: "src/assets/images/empty-image.png" };
+                });
+              })(),
+            });
+
+            // Small delay to avoid hitting Riot’s rate limit
+            await delay(200);
+          } catch (err) {
+            console.error("Error fetching match:", id, err);
+          }
+        }
 
         setMatches(matchDetails.filter(Boolean));
       } catch (err) {

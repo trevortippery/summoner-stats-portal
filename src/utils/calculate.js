@@ -7,5 +7,13 @@ export function calculateKDA(kills, deaths, assists) {
     matchKDA = ((kills + assists) / deaths).toFixed(2);
   }
 
-  return `${matchKDA} KDA`
+  return `${matchKDA} KDA`;
+}
+
+export function calculateCS(gameDuration, totalMinions) {
+  const time = gameDuration / 60;
+
+  const csPerMinute = (totalMinions / time).toFixed(1);
+
+  return `CS ${totalMinions} (${csPerMinute})`;
 }

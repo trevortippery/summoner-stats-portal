@@ -6,11 +6,11 @@ import "./assets/styles/index.css";
 const App = () => {
   return (
     <StrictMode>
-      <div className="grid grid-cols-3">
+      <div className="flex flex-col lg:grid lg:grid-cols-3">
         <div>
           <p>player stats</p>
         </div>
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <MatchHistory></MatchHistory>
         </div>
       </div>

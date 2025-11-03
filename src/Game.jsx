@@ -1,4 +1,11 @@
-const Game = ({ gameInfo, champion, summoners, augments, items }) => {
+const Game = ({
+  gameInfo,
+  champion,
+  summoners,
+  augments,
+  items,
+  participants,
+}) => {
   return (
     <article
       className={`${
@@ -8,9 +15,7 @@ const Game = ({ gameInfo, champion, summoners, augments, items }) => {
       <div className="lg:grid lg:grid-cols-7 w-full min-w-0 overflow-hidden">
         <div
           className={`flex flex-wrap gap-2 border-b mb-2 text-gray-600 lg:block lg:border-0 ${
-            gameInfo.result === "Victory"
-              ? "border-blue-400"
-              : "border-red-400"
+            gameInfo.result === "Victory" ? "border-blue-400" : "border-red-400"
           }`}
         >
           <p
@@ -95,9 +100,68 @@ const Game = ({ gameInfo, champion, summoners, augments, items }) => {
             </div>
           </div>
         </div>
-        <div>
-            <span>{gameInfo.kda}</span>
+        <div className="hidden text-gray-600 lg:flex lg:flex-col lg:justify-center lg:items-center">
+          <span>{gameInfo.kda}</span>
+          <span>{gameInfo.minionScore}</span>
+        </div>
+        <div className="hidden text-gray-600 lg:grid lg:grid-cols-2 lg:col-span-2">
+          <div>
+            {participants
+              .filter((p) => p.teamId === 100)
+              .map((p) => (
+                <div key={p.summonerName} className="flex items-center gap-1">
+                  <img
+                    src={p.championImage}
+                    alt={p.championName}
+                    className={`w-5 h-5 rounded border ${
+                      p.summonerName.toLowerCase() ===
+                      gameInfo.summonerName.toLowerCase()
+                        ? "border-white"
+                        : "border-transparent"
+                    }`}
+                  />
+                  <span
+                    className={`truncate ${
+                      p.summonerName.toLowerCase() ===
+                      gameInfo.summonerName.toLowerCase()
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {p.summonerName}
+                  </span>
+                </div>
+              ))}
           </div>
+          <div>
+            {participants
+              .filter((p) => p.teamId === 200)
+              .map((p) => (
+                <div key={p.summonerName} className="flex items-center gap-1">
+                  <img
+                    src={p.championImage}
+                    alt={p.championName}
+                    className={`w-5 h-5 rounded border ${
+                      p.summonerName.toLowerCase() ===
+                      gameInfo.summonerName.toLowerCase()
+                        ? "border-white"
+                        : "border-transparent"
+                    }`}
+                  />
+                  <span
+                    className={`truncate ${
+                      p.summonerName.toLowerCase() ===
+                      gameInfo.summonerName.toLowerCase()
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {p.summonerName}
+                  </span>
+                </div>
+              ))}
+          </div>
+        </div>
       </div>
     </article>
   );

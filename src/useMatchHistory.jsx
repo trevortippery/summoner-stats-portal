@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useQueueInfo from "./useQueueInfo";
 import { timeAgo } from "./utils/time";
-import { calculateKDA } from "./utils/calculate";
+import { calculateKDA, calculateCS } from "./utils/calculate";
 
 const summonerSpellMap = {
   1: "SummonerBoost",
@@ -89,7 +89,7 @@ const useMatchHistory = (riotId, tag) => {
           try {
             const matchRes = await fetch(
               `${baseURL}lol/match/v5/matches/${id}`,
-              { headers: { "X-Riot-Token": apiKey } }
+              { headers: { "X-Riot-Token": apiKey } },
             );
 
             if (matchRes.status === 429) {
@@ -107,16 +107,21 @@ const useMatchHistory = (riotId, tag) => {
             matchDetails.push({
               id,
               gameInfo: {
+                summonerName: p.riotIdGameName || p.summonerName,
                 gameType: queues[match.info.queueId] || "Match",
                 date: timeAgo(match.info.gameEndTimestamp),
                 result: p.win ? "Victory" : "Defeat",
                 duration: `${Math.floor(match.info.gameDuration / 60)}:${String(
-                  match.info.gameDuration % 60
+                  match.info.gameDuration % 60,
                 ).padStart(2, "0")}`,
                 kills: p.kills,
                 deaths: p.deaths,
                 assists: p.assists,
                 kda: calculateKDA(p.kills, p.deaths, p.assists),
+                minionScore: calculateCS(
+                  match.info.gameDuration,
+                  p.totalMinionsKilled + p.neutralMinionsKilled,
+                ),
               },
               champion: {
                 image: `${ddragonBase}champion/${p.championName}.png`,
@@ -143,9 +148,21 @@ const useMatchHistory = (riotId, tag) => {
                   const id = p[`item${n}`];
                   return id && id !== 0
                     ? { id, image: `${ddragonBase}item/${id}.png` }
-                    : { id: `empty-${n}`, image: "src/assets/images/empty-image.png" };
+                    : {
+                        id: `empty-${n}`,
+                        image: "src/assets/images/empty-image.png",
+                      };
                 });
               })(),
+              participants: match.info.participants.map((participant) => ({
+                summonerName:
+                  participant.riotIdGameName ||
+                  participant.summonerName ||
+                  "Unknown",
+                championName: participant.championName,
+                championImage: `${ddragonBase}champion/${participant.championName}.png`,
+                teamId: participant.teamId, // 100 = blue, 200 = red
+              })),
             });
 
             // Small delay to avoid hitting Riot’s rate limit

@@ -1,19 +1,17 @@
 import { createRoot } from "react-dom/client";
-import MatchHistory from "./MatchHistory";
+// import MatchHistory from "./MatchHistory";
 import { StrictMode } from "react";
 import "./assets/styles/index.css";
+// import { SummonerProvider } from "./context/SummonerContext";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({ routeTree });
 
 const App = () => {
   return (
     <StrictMode>
-      <div className="flex flex-col lg:grid lg:grid-cols-3">
-        <div>
-          <p>player stats</p>
-        </div>
-        <div className="lg:col-span-2">
-          <MatchHistory></MatchHistory>
-        </div>
-      </div>
+      <RouterProvider router={router} />
     </StrictMode>
   );
 };

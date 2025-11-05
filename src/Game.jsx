@@ -41,30 +41,30 @@ const Game = ({
         <div className="flex flex-wrap justify-between items-center gap-2 lg:col-span-3 lg:grid lg:grid-cols-3 min-w-0">
           <div className="flex space-x-1 min-w-0">
             <img
-              className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full shrink-0"
+              className="h-8 w-8 sm:h-10 sm:w-10 lg:h-10 lg:w-10 xl:h-12 xl:w-12 rounded-full shrink-0"
               src={champion.image}
               alt={champion.name}
             />
-            <div className="flex flex-col justify-center space-y-0.5">
+            <div className="flex flex-col gap-0.5">
               <img
-                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 rounded"
+                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 xl:h-6 xl:w-6 rounded"
                 src={summoners[0].image}
                 alt={summoners[0].name}
               />
               <img
-                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 rounded"
+                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 xl:h-6 xl:w-6 rounded"
                 src={summoners[1].image}
                 alt={summoners[1].name}
               />
             </div>
-            <div className="flex flex-col justify-center space-y-0.5">
+            <div className="flex flex-col gap-0.5">
               <img
-                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 rounded"
+                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 xl:h-6 xl:w-6 rounded"
                 src={augments[0].image}
                 alt={augments[0].name}
               />
               <img
-                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 rounded"
+                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 xl:h-6 xl:w-6 rounded"
                 src={augments[1].image}
                 alt={augments[1].name}
               />
@@ -72,7 +72,7 @@ const Game = ({
           </div>
 
           <div className="flex justify-center items-center m-auto text-xs sm:text-sm md:text-base">
-            <p className="flex items-center space-x-1 font-semibold">
+            <p className="flex items-center space-x-1 font-semibold ">
               <span className="text-slate-700">{gameInfo.kills}</span>
               <span className="text-gray-400">/</span>
               <span className="text-red-700">{gameInfo.deaths}</span>
@@ -84,7 +84,7 @@ const Game = ({
             <div className="grid grid-cols-3 gap-0.5">
               {items.slice(0, -1).map((item) => (
                 <img
-                  className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 rounded"
+                  className="h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 xl:h-6 xl:w-6 rounded"
                   key={item.id}
                   src={item.image}
                   alt={item.name}
@@ -100,7 +100,7 @@ const Game = ({
             </div>
           </div>
         </div>
-        <div className="hidden text-gray-600 lg:flex lg:flex-col lg:justify-center lg:items-center">
+        <div className="hidden text-gray-600 lg:flex lg:flex-col lg:justify-center lg:items-center lg:text-xs xl:text-base">
           <span>{gameInfo.kda}</span>
           <span>{gameInfo.minionScore}</span>
         </div>

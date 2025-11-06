@@ -6,10 +6,6 @@ const Header = () => {
       <Link to={"/"}>
         <p>Home</p>
       </Link>
-
-      <Link to={"/summoner"}>
-        <p>Tippery's Stats Page</p>
-      </Link>
     </nav>
   );
 };

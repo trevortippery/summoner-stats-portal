@@ -6,11 +6,9 @@ const MatchHistory = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      {matches.length === 0 ? (
-        <p>Loading match history...</p>
-      ) : (
-        matches.map((match) => <Game key={match.id} {...match} />)
-      )}
+      {matches.map((match) => (
+        <Game key={match.id} {...match} />
+      ))}
     </div>
   );
 };

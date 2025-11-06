@@ -1,8 +1,7 @@
 import { createRoot } from "react-dom/client";
-// import MatchHistory from "./MatchHistory";
 import { StrictMode } from "react";
 import "./assets/styles/index.css";
-// import { SummonerProvider } from "./context/SummonerContext";
+import { SummonerProvider } from "./contexts/SummonerContext";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
@@ -11,7 +10,9 @@ const router = createRouter({ routeTree });
 const App = () => {
   return (
     <StrictMode>
-      <RouterProvider router={router} />
+      <SummonerProvider>
+        <RouterProvider router={router} />
+      </SummonerProvider>
     </StrictMode>
   );
 };

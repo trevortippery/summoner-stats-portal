@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useQueueInfo from "./useQueueInfo";
 import { timeAgo } from "./utils/time";
 import { calculateKDA, calculateCS } from "./utils/calculate";
+import { useSummoner } from "./contexts/SummonerContext";
 
 const summonerSpellMap = {
   1: "SummonerBoost",
@@ -25,11 +26,13 @@ const runeTreeMap = {
   8400: "perk-images/Styles/7204_Resolve.png",
 };
 
-const useMatchHistory = (riotId, tag) => {
+const useMatchHistory = () => {
   const [matches, setMatches] = useState([]);
   const [version, setVersion] = useState(null);
   const [runeIcons, setRuneIcons] = useState({});
   const queues = useQueueInfo();
+  const { summoner } = useSummoner();
+  const { puuid } = summoner;
 
   useEffect(() => {
     (async () => {
@@ -70,14 +73,8 @@ const useMatchHistory = (riotId, tag) => {
         const apiKey = import.meta.env.VITE_RIOT_API_KEY;
         const ddragonBase = `https://ddragon.leagueoflegends.com/cdn/${version}/img/`;
 
-        const accountRes = await fetch(
-          `${baseURL}riot/account/v1/accounts/by-riot-id/${riotId}/${tag}`,
-          { headers: { "X-Riot-Token": apiKey } },
-        );
-        const accountJson = await accountRes.json();
-
         const matchIdsRes = await fetch(
-          `${baseURL}lol/match/v5/matches/by-puuid/${accountJson.puuid}/ids?start=0&count=10`,
+          `${baseURL}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10`,
           { headers: { "X-Riot-Token": apiKey } },
         );
         const matchIds = await matchIdsRes.json();
@@ -88,7 +85,7 @@ const useMatchHistory = (riotId, tag) => {
         for (const id of matchIds) {
           try {
             const matchRes = await fetch(
-              `${baseURL}lol/match/v5/matches/${id}`,
+              `${baseURL}/lol/match/v5/matches/${id}`,
               { headers: { "X-Riot-Token": apiKey } },
             );
 
@@ -99,9 +96,7 @@ const useMatchHistory = (riotId, tag) => {
             }
 
             const match = await matchRes.json();
-            const p = match.info?.participants?.find(
-              (x) => x.puuid === accountJson.puuid,
-            );
+            const p = match.info?.participants?.find((x) => x.puuid === puuid);
             if (!p) continue;
 
             matchDetails.push({
@@ -177,7 +172,7 @@ const useMatchHistory = (riotId, tag) => {
         console.error("Error fetching match history:", err);
       }
     })();
-  }, [queues, riotId, tag, version, runeIcons]);
+  }, [puuid, queues, version, runeIcons]);
 
   return matches;
 };

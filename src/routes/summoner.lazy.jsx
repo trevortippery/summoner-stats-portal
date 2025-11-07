@@ -22,7 +22,7 @@ function Summoner() {
   }
 
   return (
-    <div className="flex flex-col lg:grid lg:grid-cols-3">
+    <div className="flex flex-col lg:grid lg:grid-cols-3 bg-indigo-500">
       <div>
         <p>player stats</p>
       </div>

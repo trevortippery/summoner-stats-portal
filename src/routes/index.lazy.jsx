@@ -6,5 +6,10 @@ export const Route = createLazyFileRoute("/")({
 });
 
 function Index() {
-  return <Search />;
+  return (
+    <>
+      <h1 className="flex justify-center items-center h-75 w-auto text-md md:text-lg lg:text-3xl">Summoner Stats Portal</h1>
+      <Search />
+    </>
+  );
 }

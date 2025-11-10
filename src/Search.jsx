@@ -24,7 +24,7 @@ const Search = () => {
 
     setSummonerInfo({ gameName, tagLine });
 
-    navigate({ to: "/summoner" });
+    navigate({ to: `/summoner/${gameName}/${tagLine}` });
   };
 
   const isRoot = location.pathname === "/";
@@ -32,7 +32,7 @@ const Search = () => {
   return (
     <div
       className={`flex justify-center items-center ${
-        isRoot ? "h-screen pt-0" : "h-auto py-2"
+        isRoot ?  "pt-0" : "h-auto py-2"
       }`}
     >
       <form className="flex space-x-2" onSubmit={handleSubmit}>

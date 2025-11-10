@@ -3,6 +3,8 @@ import useQueueInfo from "./useQueueInfo";
 import { timeAgo } from "./utils/time";
 import { calculateKDA, calculateCS } from "./utils/calculate";
 import { useSummoner } from "./contexts/SummonerContext";
+import { riotRateLimiter } from "./utils/rateLimiter";
+import emptyImage from "./assets/images/empty-image.png";
 
 const summonerSpellMap = {
   1: "SummonerBoost",
@@ -73,25 +75,30 @@ const useMatchHistory = () => {
         const apiKey = import.meta.env.VITE_RIOT_API_KEY;
         const ddragonBase = `https://ddragon.leagueoflegends.com/cdn/${version}/img/`;
 
+        // Acquire rate limit token before making request
+        await riotRateLimiter.acquire();
+
         const matchIdsRes = await fetch(
           `${baseURL}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10`,
           { headers: { "X-Riot-Token": apiKey } },
         );
         const matchIds = await matchIdsRes.json();
 
-        const delay = (ms) => new Promise((res) => setTimeout(res, ms));
         const matchDetails = [];
 
         for (const id of matchIds) {
           try {
+            // Acquire rate limit token before each match request
+            await riotRateLimiter.acquire();
+
             const matchRes = await fetch(
               `${baseURL}/lol/match/v5/matches/${id}`,
               { headers: { "X-Riot-Token": apiKey } },
             );
 
             if (matchRes.status === 429) {
-              console.warn("Rate limited — waiting 2s before retry...");
-              await delay(2000);
+              console.warn("Rate limited despite limiter — waiting 5s before retry...");
+              await new Promise(res => setTimeout(res, 5000));
               continue;
             }
 
@@ -145,7 +152,7 @@ const useMatchHistory = () => {
                     ? { id, image: `${ddragonBase}item/${id}.png` }
                     : {
                         id: `empty-${n}`,
-                        image: "src/assets/images/empty-image.png",
+                        image: emptyImage,
                       };
                 });
               })(),
@@ -156,12 +163,9 @@ const useMatchHistory = () => {
                   "Unknown",
                 championName: participant.championName,
                 championImage: `${ddragonBase}champion/${participant.championName}.png`,
-                teamId: participant.teamId, // 100 = blue, 200 = red
+                teamId: participant.teamId,
               })),
             });
-
-            // Small delay to avoid hitting Riot’s rate limit
-            await delay(200);
           } catch (err) {
             console.error("Error fetching match:", id, err);
           }

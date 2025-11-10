@@ -9,5 +9,10 @@ export default defineConfig({
       target: 'react',
       autoCodeSplitting: true,
     }),
-    tailwindcss(), react()],
+    tailwindcss(), react({
+      babel: {
+        plugins: ["babel-plugin-react-compiler"]
+      },
+    }),
+  ],
 });

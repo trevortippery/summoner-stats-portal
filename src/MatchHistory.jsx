@@ -2,7 +2,7 @@ import Game from "./Game";
 import useMatchHistory from "./useMatchHistory";
 
 const MatchHistory = () => {
-  const matches = useMatchHistory("Tippery", "NA1");
+  const matches = useMatchHistory();
 
   return (
     <div className="flex flex-col gap-2">

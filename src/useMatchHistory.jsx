@@ -97,8 +97,10 @@ const useMatchHistory = () => {
             );
 
             if (matchRes.status === 429) {
-              console.warn("Rate limited despite limiter — waiting 5s before retry...");
-              await new Promise(res => setTimeout(res, 5000));
+              console.warn(
+                "Rate limited despite limiter — waiting 5s before retry...",
+              );
+              await new Promise((res) => setTimeout(res, 5000));
               continue;
             }
 

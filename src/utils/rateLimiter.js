@@ -57,15 +57,17 @@ class RateLimiter {
       }
 
       // Calculate wait time for next available token
-      const shortWait = this.shortTokens <= 0
-        ? this.shortWindow - (Date.now() - this.shortLastRefill)
-        : 0;
-      const longWait = this.longTokens <= 0
-        ? this.longWindow - (Date.now() - this.longLastRefill)
-        : 0;
+      const shortWait =
+        this.shortTokens <= 0
+          ? this.shortWindow - (Date.now() - this.shortLastRefill)
+          : 0;
+      const longWait =
+        this.longTokens <= 0
+          ? this.longWindow - (Date.now() - this.longLastRefill)
+          : 0;
 
       const waitTime = Math.max(shortWait, longWait, 100);
-      await new Promise(resolve => setTimeout(resolve, waitTime));
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
   }
 
@@ -82,13 +84,13 @@ class RateLimiter {
       short: {
         available: this.shortTokens,
         limit: this.shortLimit,
-        nextRefill: this.shortLastRefill + this.shortWindow - Date.now()
+        nextRefill: this.shortLastRefill + this.shortWindow - Date.now(),
       },
       long: {
         available: this.longTokens,
         limit: this.longLimit,
-        nextRefill: this.longLastRefill + this.longWindow - Date.now()
-      }
+        nextRefill: this.longLastRefill + this.longWindow - Date.now(),
+      },
     };
   }
 }

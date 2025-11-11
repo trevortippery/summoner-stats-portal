@@ -32,7 +32,7 @@ const Search = () => {
   return (
     <div
       className={`flex justify-center items-center ${
-        isRoot ?  "pt-0" : "h-auto py-2"
+        isRoot ? "pt-0" : "h-auto py-2"
       }`}
     >
       <form className="flex space-x-2" onSubmit={handleSubmit}>

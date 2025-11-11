@@ -8,10 +8,10 @@ const Profile = () => {
   return (
     <>
       {profile.map((gameMode) => (
-          <ProfileCard key={gameMode.leagueId} {...gameMode}/>
+        <ProfileCard key={gameMode.leagueId} {...gameMode} />
       ))}
     </>
-    );
+  );
 };
 
 export default Profile;

@@ -1,5 +1,5 @@
 import iron from "./Ranked Emblems Latest/Rank=Iron.png";
-import bronze from "./Ranked Emblems Latest/Rank=Bronze.png"
+import bronze from "./Ranked Emblems Latest/Rank=Bronze.png";
 import silver from "./Ranked Emblems Latest/Rank=Silver.png";
 import gold from "./Ranked Emblems Latest/Rank=Gold.png";
 import platinum from "./Ranked Emblems Latest/Rank=Platinum.png";

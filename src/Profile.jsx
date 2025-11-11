@@ -1,9 +1,5 @@
 import useProfile from "./useProfile";
-
-const gameModes = {
-  rankedSolo: "Ranked Solo/Duo",
-  rankedFlex: "Ranked Flex",
-};
+import ProfileCard from "./ProfileCard";
 
 const Profile = () => {
   const profile = useProfile();
@@ -11,11 +7,11 @@ const Profile = () => {
 
   return (
     <>
-    <article>
-        {gameModes.rankedSolo ? profile[0]?.queueType === "RANKED_SOLO_5x5" : gameModes.rankedFlex}
-    </article>
+      {profile.map((gameMode) => (
+          <ProfileCard key={gameMode.leagueId} {...gameMode}/>
+      ))}
     </>
-    )
+    );
 };
 
 export default Profile;

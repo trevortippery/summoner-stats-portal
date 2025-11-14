@@ -151,9 +151,12 @@ const useMatchHistory = () => {
                 return itemSlots.map((n) => {
                   const id = p[`item${n}`];
                   return id && id !== 0
-                    ? { id, image: `${ddragonBase}item/${id}.png` }
+                    ? {
+                        id: `${id}-${id}-${n}`,
+                        image: `${ddragonBase}item/${id}.png`,
+                      }
                     : {
-                        id: `empty-${n}`,
+                        id: `empty-${n}-${n}`,
                         image: emptyImage,
                       };
                 });
@@ -166,6 +169,10 @@ const useMatchHistory = () => {
                 championName: participant.championName,
                 championImage: `${ddragonBase}champion/${participant.championName}.png`,
                 teamId: participant.teamId,
+
+                gameName: participant.riotIdGameName,
+                tagLine: participant.riotIdTagLine,
+                puuid: participant.puuid,
               })),
             });
           } catch (err) {

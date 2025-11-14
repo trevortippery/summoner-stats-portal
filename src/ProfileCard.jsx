@@ -1,39 +1,26 @@
-import { rankImages } from "./assets/images";
-
-const ProfileCard = ({ queueType, tier, rank, leaguePoints, wins, losses }) => {
-  const winrate = Math.round((wins / (wins + losses)) * 100);
-  const rankImage = rankImages[tier] || rankImages.IRON;
-
-  if (!queueType) {
+const ProfileCard = ({ profileIconId, summonerLevel, gameName }) => {
+  if (!profileIconId || !gameName) {
     return (
       <article>
-        <h2>No ranks on record</h2>
+        <h2>No profile data</h2>
       </article>
     );
   }
 
   return (
-    <article className="flex flex-col h-40 mx-5 bg-gray-300 mt-4 px-2 pt-5">
-      <h3>
-        {queueType === "RANKED_SOLO_5x5" ? "Ranked Solo/Duo" : "Ranked Flex"}
-      </h3>
-      <div className="flex justify-between items-center">
+    <article className="flex flex-col h-40 bg-gray-300 mb-2 px-5 pt-5 rounded">
+      <h3 className="font-semibold">Summoner Profile</h3>
+
+      <div className="flex gap-4 mt-2 items-center">
         <img
-          className="w-20 h-20"
-          src={rankImage}
-          alt={`${tier} rank emblem`}
+          className="w-20 h-20 rounded-full"
+          src={`https://ddragon.leagueoflegends.com/cdn/15.22.1/img/profileicon/${profileIconId}.png`}
+          alt={`${gameName}'s profile icon`}
         />
+
         <div className="flex flex-col">
-          <h2 className="font-bold">
-            {tier} {rank}{" "}
-          </h2>
-          <p>{leaguePoints} LP</p>
-        </div>
-        <div className="flex flex-col">
-          <p className="">
-            {wins}W {losses}L
-          </p>
-          <p>{winrate}% Win Rate</p>
+          <h2 className="font-bold">{gameName}</h2>
+          <p>Level {summonerLevel}</p>
         </div>
       </div>
     </article>

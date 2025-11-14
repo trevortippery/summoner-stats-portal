@@ -6,6 +6,8 @@ const usePuuid = () => {
   const { gameName, tagLine, puuid, loading, error } = summoner;
 
   useEffect(() => {
+    if (puuid || !gameName || !tagLine) return;
+
     async function fetchPuuid() {
       try {
         setLoading(true);

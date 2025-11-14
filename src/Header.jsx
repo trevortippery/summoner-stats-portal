@@ -7,10 +7,10 @@ const Header = () => {
 
   return (
     <header>
-      <nav className="sticky top-0 z-50 flex w-screen h-[50px] bg-indigo-500 text-white items-center pl-5 text-xs md:text-md lg:text-lg">
+      <nav className="sticky top-0 z-50 flex w-screen h-[50px] bg-gray-300 text-black items-center pl-5 text-xs md:text-md lg:text-lg border-b border-gray-500">
         <Link
           to={"/"}
-          className="mr-6 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 hover:text-amber-300 transition-colors duration-200 font-bold"
+          className="mr-6 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-600 hover:text-amber-300 transition-colors duration-200"
         >
           <p>Home</p>
         </Link>

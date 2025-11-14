@@ -35,13 +35,12 @@ const Search = () => {
         isRoot ? "pt-0" : "h-auto py-2"
       }`}
     >
-      <form className="flex space-x-2" onSubmit={handleSubmit}>
-        {error && <div className="text-red-600">{error}</div>}
+      <form className="space-x-2" onSubmit={handleSubmit}>
         <input
           name="gameName"
           type="text"
           placeholder="Game Name"
-          className={`p-2 rounded ${isRoot ? "border rounded" : "bg-white p-2 rounded text-black"}`}
+          className={`p-2 rounded focus:outline-amber-300 ${isRoot ? "border rounded" : "bg-white p-2 rounded text-black"}`}
         />
         <input
           name="tagLine"
@@ -51,10 +50,11 @@ const Search = () => {
         />
         <button
           type="submit"
-          className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 hover:text-amber-300 transition-colors duration-200 font-bold"
+          className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-600 hover:text-amber-300 transition-colors duration-200"
         >
           Go!
         </button>
+        {error && <div className="text-red-600 text-center mt-5">{error}</div>}
       </form>
     </div>
   );

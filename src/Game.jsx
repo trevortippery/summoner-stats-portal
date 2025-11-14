@@ -1,3 +1,6 @@
+import { useNavigate } from "@tanstack/react-router";
+import { useSummoner } from "./contexts/SummonerContext";
+
 const Game = ({
   gameInfo,
   champion,
@@ -6,6 +9,33 @@ const Game = ({
   items,
   participants,
 }) => {
+  const { setSummonerInfo, setPuuid } = useSummoner();
+  const navigate = useNavigate();
+
+  function handleParticipantClick(p) {
+    if (!p.gameName) {
+      console.warn("Missing gameName for participant:", p);
+      return;
+    }
+
+    const tagLineSafe =
+      typeof p.tagLine === "string" && p.tagLine.trim() !== ""
+        ? p.tagLine
+        : "none";
+
+    setSummonerInfo({
+      gameName: p.gameName,
+      tagLine: tagLineSafe,
+    });
+
+    setPuuid(p.puuid);
+
+    navigate({
+      to: "/summoner/$gameName/$tagLine",
+      params: { gameName: p.gameName, tagLine: tagLineSafe },
+    });
+  }
+
   return (
     <article
       className={`${
@@ -121,12 +151,13 @@ const Game = ({
                     }`}
                   />
                   <span
-                    className={`truncate ${
+                    className={`truncate hover:text-blue-500 cursor-pointer ${
                       p.summonerName.toLowerCase() ===
                       gameInfo.summonerName.toLowerCase()
                         ? "text-white"
                         : "text-gray-600"
                     }`}
+                    onClick={() => handleParticipantClick(p)}
                   >
                     {p.summonerName}
                   </span>
@@ -149,12 +180,13 @@ const Game = ({
                     }`}
                   />
                   <span
-                    className={`truncate ${
+                    className={`truncate hover:text-red-500 cursor-pointer ${
                       p.summonerName.toLowerCase() ===
                       gameInfo.summonerName.toLowerCase()
                         ? "text-white"
                         : "text-gray-600"
                     }`}
+                    onClick={() => handleParticipantClick(p)}
                   >
                     {p.summonerName}
                   </span>

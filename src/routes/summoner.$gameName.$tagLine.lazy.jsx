@@ -23,7 +23,7 @@ function Summoner() {
   if (!puuid) return null;
 
   return (
-    <div className="flex flex-col lg:grid lg:grid-cols-3">
+    <div className="flex flex-col lg:grid lg:grid-cols-3 m-5 gap-5">
       <div>
         <Profile />
       </div>

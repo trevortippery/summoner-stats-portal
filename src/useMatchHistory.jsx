@@ -5,6 +5,7 @@ import { calculateKDA, calculateCS } from "./utils/calculate";
 import { useSummoner } from "./contexts/SummonerContext";
 import { riotRateLimiter } from "./utils/rateLimiter";
 import emptyImage from "./assets/images/empty-image.png";
+import { getCurrentVersion } from "./utils/version";
 
 const summonerSpellMap = {
   1: "SummonerBoost",
@@ -39,11 +40,7 @@ const useMatchHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const versionRes = await fetch(
-          "https://ddragon.leagueoflegends.com/api/versions.json",
-        );
-        const versions = await versionRes.json();
-        const latest = versions[0];
+        const latest = await getCurrentVersion();
         setVersion(latest);
 
         const runesRes = await fetch(

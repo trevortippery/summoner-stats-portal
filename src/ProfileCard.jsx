@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import { getCurrentVersion } from "./utils/version";
+
 const ProfileCard = ({ profileIconId, summonerLevel, gameName }) => {
+
+  const [currentVersion, setCurrentVersion] = useState(null);
+
+  useEffect(() => {
+    async function loadVersion() {
+      const version = await getCurrentVersion();
+      setCurrentVersion(version);
+    }
+    loadVersion();
+
+  }, [])
+
   if (!profileIconId || !gameName) {
     return (
       <article>
@@ -14,7 +29,7 @@ const ProfileCard = ({ profileIconId, summonerLevel, gameName }) => {
       <div className="flex gap-4 mt-2 items-center">
         <img
           className="w-20 h-20 rounded-full"
-          src={`https://ddragon.leagueoflegends.com/cdn/15.22.1/img/profileicon/${profileIconId}.png`}
+          src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/profileicon/${profileIconId}.png`}
           alt={`${gameName}'s profile icon`}
         />
 

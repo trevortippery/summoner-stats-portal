@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getCurrentVersion } from "./utils/version";
 
 const ProfileCard = ({ profileIconId, summonerLevel, gameName }) => {
-
   const [currentVersion, setCurrentVersion] = useState(null);
 
   useEffect(() => {
@@ -11,8 +10,7 @@ const ProfileCard = ({ profileIconId, summonerLevel, gameName }) => {
       setCurrentVersion(version);
     }
     loadVersion();
-
-  }, [])
+  }, []);
 
   if (!profileIconId || !gameName) {
     return (

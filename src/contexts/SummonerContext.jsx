@@ -16,21 +16,28 @@ export function SummonerProvider({ children }) {
       : {
           gameName: "",
           tagLine: "",
+          platform: "na1",
+          region: "americas",
           puuid: null,
           loading: false,
           error: null,
         };
   });
 
-  const setSummonerInfo = useCallback(({ gameName, tagLine }) => {
-    setSummoner((s) => ({
-      ...s,
-      gameName: gameName ?? s.gameName,
-      tagLine: tagLine ?? s.tagLine,
-      puuid: null,
-      error: null,
-    }));
-  }, []);
+  const setSummonerInfo = useCallback(
+    ({ gameName, tagLine, platform, region }) => {
+      setSummoner((s) => ({
+        ...s,
+        gameName: gameName ?? s.gameName,
+        tagLine: tagLine ?? s.tagLine,
+        platform: platform ?? s.platform,
+        region: region ?? s.region,
+        puuid: null,
+        error: null,
+      }));
+    },
+    [],
+  );
 
   const setPuuid = useCallback((puuid) => {
     setSummoner((s) => ({ ...s, puuid, loading: false, error: null }));

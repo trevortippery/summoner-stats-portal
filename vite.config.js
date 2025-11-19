@@ -4,12 +4,21 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
 
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true,
     }),
-    tailwindcss(), react({
+    tailwindcss(),
+    react({
       babel: {
         plugins: ["babel-plugin-react-compiler"]
       },

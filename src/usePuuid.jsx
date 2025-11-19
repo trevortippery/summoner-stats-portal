@@ -3,22 +3,17 @@ import { useSummoner } from "./contexts/SummonerContext";
 
 const usePuuid = () => {
   const { summoner, setPuuid, setLoading, setError } = useSummoner();
-  const { gameName, tagLine, puuid, loading, error } = summoner;
+  const { gameName, tagLine, region, puuid, loading, error } = summoner;
 
   useEffect(() => {
-    if (puuid || !gameName || !tagLine) return;
+    if (!gameName || !tagLine || !region || puuid) return;
 
     async function fetchPuuid() {
       try {
         setLoading(true);
-        const baseURL = import.meta.env.VITE_BASE_URL;
-        const apiKey = import.meta.env.VITE_RIOT_API_KEY;
 
         const puuidRes = await fetch(
-          `${baseURL}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
-          {
-            headers: { "X-Riot-Token": apiKey },
-          },
+          `/api/account/${region}/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
         );
 
         if (!puuidRes.ok) {
@@ -26,15 +21,17 @@ const usePuuid = () => {
         }
 
         const accountPuuid = await puuidRes.json();
-
         setPuuid(accountPuuid.puuid);
       } catch (err) {
         console.log("Error fetch PUUID:", err);
         setError(err.message || "Failed to fetch PUUID");
+      } finally {
+        setLoading(false);
       }
     }
+
     fetchPuuid();
-  }, [gameName, tagLine, setPuuid, setLoading, setError]);
+  }, [gameName, tagLine, region]);
 
   return { puuid, loading, error };
 };

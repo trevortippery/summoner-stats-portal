@@ -1,9 +1,10 @@
 # Summoner Stats Portal
 
-A fan-made web portal to track and analyze League of Legends summoner statistics. Inspired by platforms like **OP.GG** and **U.GG**, this project aims to replicate their analytical experience while implementing the functionality and design **from scratch** using modern web technologies.
+A fan-made web portal to track and analyze League of Legends summoner statistics. Inspired by platforms like **OP.GG** and **U.GG**, this project aims to replicate their analytical experience while implementing the functionality and design using modern web technologies.
 
 ## Tech Stack
 * **Frontend:** React, Vite, TailwindCSS
+* **Backend:** Node.js/Fastify
 * **State Management / Data Fetching:** TanStack Query (React Query)
 * **Routing:** React Router
 * **Language:** JavaScript
@@ -12,32 +13,51 @@ A fan-made web portal to track and analyze League of Legends summoner statistics
 
 ## Setup
 
-1. **Create `.env.local`**
+### Backend Setup
 
-Copy `.env.example` to `.env.local`:
+1. **Navigate to the backend directory**
+```bash
+  cd api
+```
 
-  ```bash
-  cp .env.example .env.local
-  ```
+2. **Create `.env` file**
 
-2. **Add your Riot API key**
+  Copy `.env.example` to `.env`:
+```bash
+  cp .env.example .env
+```
 
-Fill in your Riot API key in `.env.local`
+3. **Add your RIOT API key**
 
-  ```env
-  VITE_RIOT_API_KEY=your_api_key_here
-  VITE_BASE_URL=https://americas.api.riotgames.com/
-  ```
+  Fill in your Riot API key in `.env`:
+```env
+  RIOT_API_KEY=your_api_key_here
+```
 
-3. **Install dependencies and start the project**
+4. **Install dependencies and start the backend**
+```bash
+  npm install
+  node server.js
+```
 
-  ```
+### Frontend Setup
+
+1. **Navigate to the root directory**
+
+  Open a new terminal or navigate back from the backend directory:
+```bash
+  cd ..
+```
+
+2. **Install dependencies and start the development server**
+```bash
   npm install
   npm run dev
-  ```
+```
 
 ### Notes
 
 * This project is fan-made and not monetized.
 * No assets or code are copied from OP.GG or U.GG - their design and data structures serve only as reference and inspiration.
-* Make sure not to commit your .env.local file with your API key.
+* **Security:** Never commit your `.env` file with your API key. The backend handles all API requests to keep your key secure.
+* Make sure both backend and frontend servers are running for the application to work properly.

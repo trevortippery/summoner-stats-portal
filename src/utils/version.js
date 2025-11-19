@@ -6,6 +6,4 @@ export async function getCurrentVersion() {
   const data = await response.json();
 
   return data[0];
-
-
 }

@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react";
 import { useSummoner } from "./contexts/SummonerContext";
-import { riotRateLimiter } from "./utils/rateLimiter";
+// import { riotRateLimiter } from "./utils/rateLimiter";
 
 const useRank = () => {
   const { summoner } = useSummoner();
-  const { puuid, gameName } = summoner;
+  const { puuid, gameName, platform } = summoner;
   const [rank, setRank] = useState([]);
 
   useEffect(() => {
     async function getRankStats() {
-      if (!puuid) return;
+      if (!puuid || !platform) return;
 
       try {
-        await riotRateLimiter.acquire();
+        // await riotRateLimiter.acquire();
 
-        const apiKey = import.meta.env.VITE_RIOT_API_KEY;
-        const profileStatsRes = await fetch(
-          `
-          https://na1.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`,
-          { headers: { "X-Riot-Token": apiKey } },
-        );
+        // const apiKey = import.meta.env.VITE_RIOT_API_KEY;
+        const profileStatsRes = await fetch(`/api/rank/${platform}/${puuid}`);
 
         if (!profileStatsRes.ok) {
           throw new Error(
@@ -47,7 +43,7 @@ const useRank = () => {
     }
 
     getRankStats();
-  }, [puuid]);
+  }, [puuid, platform, gameName]);
 
   return rank;
 };

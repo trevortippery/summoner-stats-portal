@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { riotRateLimiter } from "./utils/rateLimiter";
+// import { riotRateLimiter } from "./utils/rateLimiter";
 import { useSummoner } from "./contexts/SummonerContext";
 
 const useProfile = () => {
   const { summoner } = useSummoner();
-  const { puuid, gameName } = summoner;
+  const { puuid, gameName, platform } = summoner;
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getProfileStats() {
-      if (!puuid) return;
+      if (!puuid || !platform) return;
+
+      if (loading) return;
 
       try {
-        await riotRateLimiter.acquire();
-
-        const apiKey = import.meta.env.VITE_RIOT_API_KEY;
+        setLoading(true);
 
         const profileRes = await fetch(
-          `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`,
-          { headers: { "X-Riot-Token": apiKey } },
+          `/api/summoner/by-puuid/${platform}/${puuid}`,
         );
 
         if (!profileRes.ok) {
@@ -29,13 +29,15 @@ const useProfile = () => {
         setProfile(profileData);
       } catch (err) {
         console.error(`Failed to fetch ${gameName}'s profile`, err);
+      } finally {
+        setLoading(false);
       }
     }
 
     getProfileStats();
-  }, [puuid]);
+  }, [puuid, platform]);
 
-  return profile;
+  return { profile, loading };
 };
 
 export default useProfile;

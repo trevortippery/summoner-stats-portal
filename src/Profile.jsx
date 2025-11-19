@@ -5,11 +5,12 @@ import ProfileCard from "./ProfileCard";
 import { useSummoner } from "./contexts/SummonerContext";
 
 const Profile = () => {
-  const profile = useProfile();
+  const { profile, loading } = useProfile();
   const rank = useRank();
   const { summoner } = useSummoner();
 
-  if (!profile) return <p>Loading...</p>;
+  if (loading) return <div>Loading profile...</div>;
+  if (!profile) return <div>No profile data</div>;
 
   return (
     <>

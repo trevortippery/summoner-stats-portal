@@ -12,6 +12,9 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: "happy-dom",
+  },
   plugins: [
     tanstackRouter({
       target: 'react',

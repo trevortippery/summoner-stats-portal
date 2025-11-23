@@ -12,9 +12,6 @@ const useRank = () => {
       if (!puuid || !platform) return;
 
       try {
-        // await riotRateLimiter.acquire();
-
-        // const apiKey = import.meta.env.VITE_RIOT_API_KEY;
         const profileStatsRes = await fetch(`/api/rank/${platform}/${puuid}`);
 
         if (!profileStatsRes.ok) {
